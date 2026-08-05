@@ -4,7 +4,7 @@
   "release_date": "05-Aug-2026",
   "download_url": "https://github.com/rajatdb/BG-Radar-System/blob/main/release/download/v3.5/BG_Radar_System_v3.5_Setup.exe",
   "update_notes": [
-    "Added automated versioning",
-    "Performance and bug fixes"
+    "In-App Seamless Auto Updater integrated",
+    "Performance optimizations for Excel export"
   ]
 }
