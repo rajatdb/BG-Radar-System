@@ -110,23 +110,36 @@ class InAppSeamlessUpdater:
         ).start()
 
     def download_and_apply_update(self, download_url, progress, status_lbl, dialog):
-        """Downloads updated EXE into Temp directory to prevent Permission Denied errors"""
+        """Downloads updated EXE with full Redirect Handling & Integrity Check"""
         try:
             temp_dir = tempfile.gettempdir()
             temp_new_exe = os.path.join(temp_dir, "BG_Radar_New.exe")
-            
+
+            # Remove old leftover file if present
+            if os.path.exists(temp_new_exe):
+                try:
+                    os.remove(temp_new_exe)
+                except Exception:
+                    pass
+
+            # Setup urllib request with proper headers to follow GitHub AWS S3 Redirects
+            opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler)
             req = urllib.request.Request(
                 download_url,
-                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'application/octet-stream'
+                }
             )
-            
-            with urllib.request.urlopen(req, timeout=45) as response:
+
+            with opener.open(req, timeout=60) as response:
+                # Get final content length after redirect
                 total_size = response.getheader('Content-Length')
                 total_size = int(total_size) if total_size else 0
-                
+
                 downloaded = 0
-                block_size = 8192
-                
+                block_size = 16384  # 16KB buffer for faster download
+
                 with open(temp_new_exe, 'wb') as out_file:
                     while True:
                         buffer = response.read(block_size)
@@ -134,17 +147,28 @@ class InAppSeamlessUpdater:
                             break
                         downloaded += len(buffer)
                         out_file.write(buffer)
-                        
+
                         if total_size > 0:
                             percent = int((downloaded / total_size) * 100)
                             dialog.after(0, lambda p=percent: progress.config(value=p))
                             dialog.after(0, lambda d=downloaded, t=total_size: status_lbl.config(
-                                text=f"Downloaded {d//1024} KB / {t//1024} KB ({percent}%)"
+                                text=f"Downloaded {d // 1024} KB / {t // 1024} KB ({percent}%)"
                             ))
                         else:
                             dialog.after(0, lambda d=downloaded: status_lbl.config(
-                                text=f"Downloaded {d//1024} KB..."
+                                text=f"Downloaded {d // 1024} KB..."
                             ))
+
+            # --- VALIDATION: Ensure file is a genuine executable (> 2 MB) ---
+            file_size = os.path.getsize(temp_new_exe)
+            if file_size < 2000000:
+                raise ValueError(f"Downloaded file size ({file_size} bytes) is too small. Expected full executable.")
+
+            # Validate Windows PE EXE Header (First 2 bytes must be 'MZ')
+            with open(temp_new_exe, 'rb') as f:
+                header = f.read(2)
+                if header != b'MZ':
+                    raise ValueError("Downloaded file is not a valid Windows Binary Executable (Corrupted/HTML page received).")
 
             dialog.after(0, lambda: status_lbl.config(text="Applying Update & Restarting Portal...", fg="#4ade80"))
             time.sleep(1)

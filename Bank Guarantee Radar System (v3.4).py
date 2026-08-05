@@ -33,6 +33,8 @@ GID_MAIN = "161119154"
 
 CSV_MAIN_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={GID_MAIN}"
 CSV_HISTORY_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet=UPDATE_HISTORY"
+# --- Google Apps Script Web App URL for User Tracking ---
+WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwpECn1HQa-Q3Jo6ivC87UTr8RRUuvUjA15JP58gCC55lut7ZvfAzRzf6BQ2ovVvjmFsQ/exec"
 
 # Base Directory Resolution
 if getattr(sys, 'frozen', False):
@@ -411,6 +413,16 @@ class ExecutiveRailwaysPortal(tk.Tk):
             cursor="hand2", command=self.export_excel
         )
         export_btn.pack(side="left", padx=5, pady=8, ipady=5, ipadx=12)
+	
+	# Connected Users Button
+        users_btn = tk.Button(
+            control_bar, text="👥 Live Active Staff", font=("Segoe UI", 10, "bold"),
+            bg="#0284c7", fg="#ffffff",
+            activebackground="#0369a1", activeforeground="#ffffff",
+            relief="flat", bd=0, highlightthickness=0,
+            cursor="hand2", command=self.show_connected_users_dialog
+        )
+        users_btn.pack(side="left", padx=5, pady=8, ipady=5, ipadx=12)
 
         search_lbl = tk.Label(control_bar, text="🔍 Universal Search:", font=("Segoe UI", 10, "bold"), fg="#ffffff", bg=self.NAVY)
         search_lbl.pack(side="left", padx=(15, 5))
@@ -582,6 +594,133 @@ class ExecutiveRailwaysPortal(tk.Tk):
         self.after(50, self.trigger_async_load)
         # Check for Software Version Updates
         self.after(1500, self.trigger_live_seamless_update)
+	# Initialize Security Tracker & Start Background Ping
+        self.security_tracker = DeviceUserSecurityTracker()
+        self.start_heartbeat_ping()
+
+    # ------------------------------------------------------------------
+    # Ensure these methods are defined INSIDE ExecutiveRailwaysPortal class
+    # ------------------------------------------------------------------
+    def send_heartbeat_ping(self):
+        """Sends periodic live status ping to Google Sheet Web App"""
+        if not WEB_APP_URL or "YOUR_DEPLOYMENT_ID" in WEB_APP_URL:
+            return
+        try:
+            payload = self.security_tracker.get_device_info()
+            data_bytes = json.dumps(payload).encode('utf-8')
+            req = urllib.request.Request(
+                WEB_APP_URL, 
+                data=data_bytes, 
+                headers={'Content-Type': 'application/json'}
+            )
+            urllib.request.urlopen(req, timeout=5)
+        except Exception:
+            pass
+
+    def start_heartbeat_ping(self):
+        """Triggers ping every 45 seconds on background thread"""
+        def ping_loop():
+            while True:
+                self.send_heartbeat_ping()
+                time.sleep(45)
+        
+        threading.Thread(target=ping_loop, daemon=True).start()
+
+    def show_connected_users_dialog(self):
+        """Displays dialog showing all registered and live online staff members"""
+        if not WEB_APP_URL or "YOUR_DEPLOYMENT_ID" in WEB_APP_URL:
+            messagebox.showwarning("Configuration Needed", "Please set your deployed Google Web App URL in WEB_APP_URL variable.")
+            return
+
+        dialog = tk.Toplevel(self)
+        dialog.title("🌐 Connected Network Staff Users")
+        dialog.geometry("700x420")
+        dialog.configure(bg=self.NAVY)
+        dialog.transient(self)
+        dialog.grab_set()
+
+        lbl_title = tk.Label(
+            dialog, text="👥 Network Staff Activity Dashboard", 
+            font=("Segoe UI", 12, "bold"), fg=self.AMBER, bg=self.NAVY
+        )
+        lbl_title.pack(pady=10)
+
+        frame = tk.Frame(dialog, bg=self.NAVY)
+        frame.pack(fill="both", expand=True, padx=15, pady=10)
+
+        tree = ttk.Treeview(
+            frame, 
+            columns=("Computer", "User", "IP", "Status", "Last_Active"), 
+            show="headings"
+        )
+        
+        tree.heading("Computer", text="Computer Name")
+        tree.heading("User", text="Staff User")
+        tree.heading("IP", text="IP Address")
+        tree.heading("Status", text="Live Status")
+        tree.heading("Last_Active", text="Last Seen Timestamp")
+
+        tree.column("Computer", width=140, anchor="center")
+        tree.column("User", width=120, anchor="center")
+        tree.column("IP", width=110, anchor="center")
+        tree.column("Status", width=110, anchor="center")
+        tree.column("Last_Active", width=160, anchor="center")
+
+        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scrollbar.set)
+
+        tree.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        tree.tag_configure("ONLINE", background="#dcfce7", foreground="#166534")
+        tree.tag_configure("OFFLINE", background="#fee2e2", foreground="#991b1b")
+
+        def format_to_ist_display(raw_time_str):
+            """Converts raw ISO UTC timestamp strings to clean DD/MM/YYYY hh:mm AM/PM IST"""
+            if not raw_time_str or raw_time_str == "N/A":
+                return "N/A"
+            try:
+                # Parse ISO date string
+                dt = pd.to_datetime(raw_time_str, errors='coerce')
+                if pd.isna(dt):
+                    return str(raw_time_str)
+                
+                # Convert UTC / Naive datetime to Indian Standard Time (+5:30)
+                if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+                    dt = dt.tz_localize('UTC').tz_convert('Asia/Kolkata')
+                else:
+                    dt = dt.tz_convert('Asia/Kolkata')
+                    
+                return dt.strftime('%d/%m/%Y %I:%M %p')
+            except Exception:
+                return str(raw_time_str)
+
+        def fetch_users():
+            try:
+                req = urllib.request.Request(WEB_APP_URL, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    users = json.loads(resp.read().decode('utf-8'))
+                    
+                    dialog.after(0, lambda: [tree.delete(item) for item in tree.get_children()])
+                    
+                    for u in users:
+                        status_str = "🟢 ONLINE" if u.get('status') == "ONLINE" else "🔴 OFFLINE"
+                        tag = u.get('status', 'OFFLINE')
+                        
+                        # Formatted readable IST timestamp
+                        formatted_last_seen = format_to_ist_display(u.get('last_seen', 'N/A'))
+                        
+                        dialog.after(0, lambda u=u, s=status_str, t=tag, ls=formatted_last_seen: tree.insert("", "end", values=(
+                            u.get('computer_name', 'N/A'),
+                            u.get('username', 'N/A'),
+                            u.get('ip_address', 'N/A'),
+                            s,
+                            ls
+                        ), tags=(t,)))
+            except Exception as e:
+                dialog.after(0, lambda: messagebox.showerror("Error", f"Failed to fetch active users:\n{e}", parent=dialog))
+
+        threading.Thread(target=fetch_users, daemon=True).start()
 
     def trigger_live_seamless_update(self):
         """Triggers background seamless version checker"""
