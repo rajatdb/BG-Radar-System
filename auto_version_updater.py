@@ -110,7 +110,7 @@ class InAppSeamlessUpdater:
         ).start()
 
     def download_and_apply_update(self, download_url, progress, status_lbl, dialog):
-        """Downloads updated EXE into Temp directory to prevent Permission Denied errors"""
+        """Downloads updated EXE into Temp directory with integrity verification"""
         try:
             temp_dir = tempfile.gettempdir()
             temp_new_exe = os.path.join(temp_dir, "BG_Radar_New.exe")
@@ -145,6 +145,12 @@ class InAppSeamlessUpdater:
                             dialog.after(0, lambda d=downloaded: status_lbl.config(
                                 text=f"Downloaded {d//1024} KB..."
                             ))
+
+            # --- INTEGRITY CHECK START ---
+            file_size = os.path.getsize(temp_new_exe)
+            if file_size < 1000000:  # If file size is less than 1 MB, it's corrupted or HTML
+                raise ValueError("Downloaded update file is corrupted or invalid (Size too small). Check GitHub Release asset URL.")
+            # --- INTEGRITY CHECK END ---
 
             dialog.after(0, lambda: status_lbl.config(text="Applying Update & Restarting Portal...", fg="#4ade80"))
             time.sleep(1)
