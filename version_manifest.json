@@ -1,10 +1,10 @@
 {
   "product_code": "NWR_BG_RADAR_PRO",
-  "latest_version": "v4.0",
-  "release_date": "05/08/2026",
+  "latest_version": "v3.5",
+  "release_date": "05-Aug-2026",
+  "download_url": "https://github.com/rajatdb/BG-Radar-System/blob/main/release/download/v3.5/BG_Radar_System_v3.5_Setup.exe",
   "update_notes": [
-    "Seamless Live In-App Update Engine Verified",
-    "System User Security Audit Trail Active"
-  ],
-  "download_url": "https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1rDrO9zvK-q6LKse2lyz9uelmGYU1FpY6"
+    "In-App Seamless Auto Updater integrated",
+    "Performance optimizations for Excel export"
+  ]
 }
