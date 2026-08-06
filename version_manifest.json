@@ -2,7 +2,7 @@
   "product_code": "NWR_BG_RADAR_PRO",
   "latest_version": "v3.5",
   "release_date": "05-Aug-2026",
-  "download_url": "https://github.com/rajatdb/BG-Radar-System/blob/main/release/download/v3.5/BG_Radar_System_v3.5_Setup.exe",
+  "download_url": "https://raw.githubusercontent.com/rajatdb/BG-Radar-System/main/release/download/v3.5/BG_Radar_System_v3.5_Setup.exe",
   "update_notes": [
     "In-App Seamless Auto Updater integrated",
     "Performance optimizations for Excel export"
