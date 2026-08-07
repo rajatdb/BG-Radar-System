@@ -1,18 +1,12 @@
 {
   "product_code": "NWR_BG_RADAR_PRO",
   "latest_version": "v3.5",
-<<<<<<< HEAD
-  "release_date": "06-Aug-2026",
-  "download_url": "https://raw.githubusercontent.com/rajatdb/BG-Radar-System/main/release/download/v3.5/Bank_Guarantee_Radar_System.exe",
-  "update_notes": [
-    "In-App Seamless Auto Updater integrated",
-    "Performance optimizations for Excel export"
-=======
   "release_date": "2026-08-07",
   "download_url": "https://github.com/rajatdb/BG-Radar-System/releases/download/v3.5/BG_Radar_System_v3.5_Setup.exe",
   "update_notes": [
-    "Inno Setup Auto-Update Integration",
-    "Bug fixes and performance updates"
->>>>>>> 03a2a3c6cc79702b783202286fa3bafaf3bf7795
+    "Integrated Inno Setup In-App Silent Auto-Updater Engine",
+    "Enhanced Excel Export performance with formatted cell styles",
+    "Optimized UI responsiveness and active network user tracking",
+    "Bug fixes and general stability improvements"
   ]
 }
