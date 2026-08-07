@@ -1,0 +1,41 @@
+============================================================
+OFFICIAL SOFTWARE LICENSE & TERMS OF USE
+INDIAN RAILWAYS — BANK GUARANTEE RADAR SYSTEM
+============================================================
+
+1. AUTHORSHIP & OWNERSHIP
+-------------------------------------------------------------------------------
+This software application ("Bank Guarantee Radar System") is designed, developed, and 
+maintained exclusively by Shri Rajat Dubey (Sr. Accountant, Bikaner Division, 
+North Western Railway). All intellectual property rights, structural logic, 
+and proprietary source code belong to Indian Railways / North Western Railway.
+
+2. OFFICIAL USE & AUTHORIZATION
+-------------------------------------------------------------------------------
+This application is strictly designated for OFFICIAL USE ONLY within Indian 
+Railways executive offices, Divisional Finance Manager (DFM) branches, ADEN 
+units, and authorized accounting departments.
+
+Un-authorized distribution, copying, commercial resale, reverse engineering, 
+or deployment outside Indian Railways internal infrastructure is strictly 
+prohibited.
+
+3. DATA INTEGRITY & PRIVACY
+-------------------------------------------------------------------------------
+* Live data streams are synced securely over encrypted protocols via official 
+  Google Sheets API endpoints.
+* Persistent local databases (JSON blacklist logs, known entries registry) 
+  are stored locally within the application directory to maintain audit logs.
+* No personal data or proprietary ledger information is exported to unauthorized 
+  third-party servers.
+
+4. WARRANTY & DISCLAIMER
+-------------------------------------------------------------------------------
+The software is provided "AS IS" without warranty of any kind, express or 
+implied. While extreme care has been taken to ensure real-time accuracy and 
+formatting compliance, internal Railway finance officers are advised to verify 
+original paper Bank Guarantees prior to final legal discharge or forfeit.
+
+============================================================
+Copyright (c) 2026 Indian Railways — North Western Railway. All Rights Reserved.
+============================================================

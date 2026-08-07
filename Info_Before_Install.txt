@@ -1,0 +1,36 @@
+============================================================
+SYSTEM REQUIREMENTS & PREREQUISITES — BEFORE INSTALLATION
+INDIAN RAILWAYS — BANK GUARANTEE RADAR SYSTEM
+============================================================
+
+IMPORTANT NOTICE FOR SYSTEM ADMINISTRATORS & FINANCE USERS:
+Please review the following requirements before installing or running the 
+Band Guarantee Radar System Executable (`Bank Guarantee Radar System.exe`).
+
+1. SYSTEM REQUIREMENTS
+-------------------------------------------------------------------------------
+* Operating System: Windows 10 / Windows 11 (64-bit Edition)
+* Display Resolution: 1366x768 or higher (Recommended: 1920x1080 Full HD)
+* System RAM: 4 GB Minimum (8 GB Recommended)
+* Disk Space: 150 MB free disk space
+
+2. NETWORK & CONNECTIVITY PREREQUISITES
+-------------------------------------------------------------------------------
+* Active Internet Connection (RailWire / NWR Intranet / Standard Broadband).
+* HTTPS Access (Port 443) must be allowed for accessing Google Sheets CSV 
+  data streams:
+  - https://docs.google.com/spreadsheets/
+* Firewall / Proxy Settings: Ensure firewall does not block urllib requests.
+
+3. OPTIONAL ASSETS (FOR OFFICIAL BRANDING)
+-------------------------------------------------------------------------------
+* To display the official 1:1 aspect ratio circular emblem in the top header, 
+  place the official badge file (`app_icon.ico`, `logo.png`, or `logo.jpg`) 
+  in the same folder as the application executable.
+* If no logo file is found, the portal automatically renders a high-resolution 
+  fallback emblem without crashing.
+
+============================================================
+Developer: Shri Rajat Dubey (Sr. Accountant, NWR)
+Division: Bikaner Division, North Western Railway
+============================================================

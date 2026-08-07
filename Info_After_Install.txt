@@ -1,0 +1,49 @@
+============================================================
+GETTING STARTED & USER GUIDE — AFTER INSTALLATION
+INDIAN RAILWAYS — BANK GUARANTEE RADAR SYSTEM
+============================================================
+
+Congratulations! The Bank Guarantee Radar System has been successfully 
+configured on your system.
+
+1. APPLICATION FEATURES & NAVIGATION
+-------------------------------------------------------------------------------
+* TAB 1: 📋 Pending Active BG Radar
+  Monitors active BGs expiring within 90 days with color-coded alerts:
+  - Dark Red: Critical Overdue (No Remarks Added)
+  - Soft Red: Urgent Action Required (< 30 Days)
+  - Soft Orange: High Priority Action (< 60 Days)
+  - Soft Yellow: Due for Renewal (< 90 Days)
+
+* TAB 2: ✅ Validated BGs (Remarks)
+  Automatically filters out BGs where staff have submitted valid official 
+  remarks, keeping the main pending radar clear and executive-ready.
+
+* TAB 3: 📜 Update History
+  Logs all BG validity date extensions permanently with IST timestamps.
+  - Features 🔔 Blinking Alerts when new extension logs arrive.
+  - Highlights new updates with a 🆕 badge in soft blue.
+
+2. KEY INTERACTIVE FUNCTIONS
+-------------------------------------------------------------------------------
+* Universal Dynamic Search: Type any contractor name, dealer, BG number, or 
+  department in the search bar. It filters active data in real-time across 
+  all tabs and fully resets on backspace/clear.
+* Record Inspector: Click any record row to inspect full details in the 
+  right-side panel. Text in the Inspector is fully selectable and copyable.
+* Right-Click Context Menu: Right-click any row in any table to instantly 
+  copy complete row details to clipboard.
+* Modern Deselect: Click any blank space outside the tables to clear row 
+  selection while maintaining original color tags.
+* Smart Excel Export: Click "Export to Excel (.xlsx)" to generate formatted 
+  executive reports matching your current tab view and search filter.
+
+3. TECHNICAL SUPPORT & FEEDBACK
+-------------------------------------------------------------------------------
+For bug reports, feature requests, or ledger integration queries:
+Contact: Shri Rajat Dubey (Sr. Accountant, NWR)
+Division: Senior Divisional Finance Manager Office, Bikaner Division (NWR)
+
+============================================================
+OFFICIAL USE ONLY — NORTH WESTERN RAILWAY
+============================================================
